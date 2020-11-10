@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>HTML5</title>
+<style type="text/css">
+    #div1, #div2
+    {float:left; width:100px; height:35px; margin:10px;padding:10px;border:1px solid #aaaaaa;}
+</style>
+<script>
+    function allowDrop(ev)
+    {
+        ev.preventDefault();
+    }
+    
+    function drag(ev)
+    {
+        ev.dataTransfer.setData("Text",ev.target.id);
+    }
+    
+    function drop(ev)
+    {
+        ev.preventDefault();
+        var data=ev.dataTransfer.getData("Text");
+        ev.target.appendChild(document.getElementById(data));
+    }
+</script>
+</head>
+ 
+<body>
+    <!--文字替換-->
+    <canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;">瀏覽器過舊，請升級。</canvas>
+    <hr>
+    <a href="https://www.runoob.com/w3cnote/html5-canvas-intro.html" target="_blank" rel="noopener noreferrer">Canvas教學</a>
+    <hr>
+    <a href="https://www.runoob.com/svg/svg-tutorial.html" target="_blank" rel="noopener noreferrer">SVG教學</a>
+    <hr>
+    <p><b>拖拉</b></p>
+    <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <img src="planets.gif" draggable="true" ondragstart="drag(event)" id="drag1" width="88" height="31"></div>
+    <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <hr>
+    <p id="myLocation">點擊獲取位址</p>
+    <button onclick="getLocation()">點我</button>
+    <div id="mapholder"></div>
+    <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
+    <hr>
+    <a href="https://www.runoob.com/tags/ref-av-dom.html" target="_blank" rel="noopener noreferrer">音頻/視頻</a>
+    <hr>
+    <form action="#">
+    顏色: <input type="color" name="favcolor"><br>
+    日期: <input type="date" name="bday"><br>
+    <input type="datetime-local" name="bdaytime"><br>
+    <input type="month" name="bdaymonth"><br>
+    E-mail: <input type="email" name="email"><br>
+    數字:<input type="number" name="quantity" min="1" max="20" step="2"><br>
+    <input type="range" name="points" min="1" max="10"><br>
+    Search Google: <input type="search" name="googlesearch"><br>
+    時間: <input type="time" name="usr_time"><br>
+    url:<input type="url" name="homepage"><br>
+    周: <input type="week" name="week_year"><br>
+    <input list="browsers">
+    <datalist id="browsers">
+        <option value="Internet Explorer">
+        <option value="Firefox">
+        <option value="Chrome">
+        <option value="Opera">
+        <option value="Safari">
+    </datalist>
+    </form>
+    <hr>
+    <p><b>HTML5-表單屬性</b></p>
+    <table border="1">
+        <caption><b>&lt;form&gt;新屬性:</b></caption>
+        <tr>
+            <th>屬性</th>
+            <th>描述</th>
+        </tr>
+        <tr>
+            <td>autocomplete</td>
+            <td>自動完成</td>
+        </tr>
+        <tr>
+            <td>novalidate</td>
+            <td>不驗證表單</td>
+        </tr>
+    </table>
+    <table border="1">
+        <caption><b>&lt;input&gt;新屬性:</b></caption>
+        <tr>
+            <th>屬性</th>
+            <th>描述</th>
+        </tr>
+        <tr>
+            <td>autofocus</td>
+            <td>頁面載入時自動聚焦</td>
+        </tr>
+        <tr>
+            <td>form</td>
+            <td>規定&lt;input&gt;所屬的一個或多個form</td>
+        </tr>
+        <tr>
+            <td>formaction</td>
+            <td>描述表單提交的url，會覆蓋&lt;form&gt;的action屬性(用在type="submit"和type="image")</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</body>
+
+<script>
+    var x=document.getElementById("demo");
+    function getLocation()
+    {
+        if (navigator.geolocation)
+        {
+            navigator.geolocation.getCurrentPosition(showPosition,showError);
+        }
+        else
+        {
+            x.innerHTML="瀏覽器不支援獲取位置";
+        }
+    }
+    
+    function showPosition(position)
+    {
+        lat=position.coords.latitude;
+        lon=position.coords.longitude;
+        latlon=new google.maps.LatLng(lat, lon)
+        mapholder=document.getElementById('mapholder')
+        mapholder.style.height='250px';
+        mapholder.style.width='500px';
+    
+        var myOptions={
+            center:latlon,zoom:14,
+            mapTypeId:google.maps.MapTypeId.ROADMAP,
+            mapTypeControl:false,
+            navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+        };
+        var map=new google.maps.Map(document.getElementById("mapholder"),myOptions);
+        var marker=new google.maps.Marker({position:latlon,map:map,title:"You are here!"});
+    }
+    
+    function showError(error)
+    {
+        switch(error.code) 
+        {
+            case error.PERMISSION_DENIED:
+                x.innerHTML="用戶拒絕獲取。"
+                break;
+            case error.POSITION_UNAVAILABLE:
+                x.innerHTML="位置不可用。"
+                break;
+            case error.TIMEOUT:
+                x.innerHTML="請求超時。"
+                break;
+            case error.UNKNOWN_ERROR:
+                x.innerHTML="未知錯誤。"
+                break;
+        }
+    }
+    </script>
+</html>
